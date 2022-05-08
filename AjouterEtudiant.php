@@ -101,7 +101,32 @@ else
         <div class="container">
             <div class="wrapper">
                 <title class="title">Ajouter Etudiant </title>
-                <div id="demo"></div>
+                <?php
+
+include("connexion.php");
+if (isset($_POST['ajouter'])) {
+    $Classe = trim($_POST['classe']);
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $pwd= $_POST['pwd'];
+    $cpwd= $_POST['cpwd'];
+    $cin = $_POST['cin'];
+    $email = $_POST['email'];
+    $adresse = $_POST['adresse'];
+    $sqlverif = " select * from etudiant where cin=?";
+    $stmtverif = $pdo->prepare($sqlverif);
+    $stmtverif->execute(array($cin));
+    $res = $stmtverif->fetchAll();
+    if (count($res) > 0) {
+        echo " CIN existe deja ";
+    } else {
+        $sql = "INSERT INTO etudiant(cin,email,password,cpassword,nom,prenom,adresse,Classe)  values (?,?,?,?,?,?,?,?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array($cin,$email,$pwd,$cpwd,$nom,$prenom,$adresse,$Classe,));
+        echo "  ajouté avec succées " ;
+    }
+}
+?>
                 <form id="myForm" method="POST">
                     <div class="row">
                         <input type="text" id="nom" name="nom" placeholder="Nom:" required />
@@ -141,7 +166,7 @@ else
                         <input type="text" id="adresse" name="adresse" placeholder="Adresse:" required />
                     </div>
                     <div>
-                        <button class="btnajouter" type="button" name="valider" onclick="ajouter()">Ajouter</button>
+                    <button class="btnajouter" type="submit" name="ajouter" value="ajouter">Ajouter</button>
                     </div>
                 </form>
 
@@ -149,36 +174,7 @@ else
         </div>
 
     </div>
-    <script>
-        function ajouter() {
-            var xmlhttp = new XMLHttpRequest();
-            var url = "http://localhost/webENICAR/ajouter.php";
-
-            //Envoie Req
-            xmlhttp.open("POST", url, true);
-
-            form = document.getElementById("myForm");
-            formdata = new FormData(form);
-
-            xmlhttp.send(formdata);
-
-            //Traiter Res
-
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    // alert(this.responseText);
-                    if (this.responseText == "OK") {
-                        document.getElementById("demo").innerHTML = "L'ajout de l'étudiant a été bien effectué";
-                        document.getElementById("demo").style.backgroundColor = "white";
-                    } else {
-                        document.getElementById("demo").innerHTML = " Merci de vérifier le CIN";
-                        document.getElementById("demo").style.backgroundColor = "#fba";
-                    }
-                }
-            }
-
-
-        }
+    
     </script>
     <script>
         $('.btn').click(function() {
