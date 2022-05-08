@@ -74,7 +74,7 @@ else
     </div>
     <div class="contenu">
         <div class="box">
-            <div class="title">Saisir le cin de l'etudiant a Chercher</div>
+            <div class="title">Saisir le cin de l'etudiant à modifier</div>
             <form action="" method="POST">
                 <div class="row">
                     <input type="text" name='cin' placeholder="Donner le CIN" />
