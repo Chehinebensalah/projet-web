@@ -145,7 +145,7 @@ else
             <div class="wrapper">
                 <title class="title">Saisir Absence </title>
                 <div id="demo"></div>
-                <form action="notsaisirabsence.php" method="POST" id="myForm">
+                <form action="Saisirabsence.php" method="POST" id="myForm">
                     <h4><?php if (isset($_POST['ajouter'])){ echo "Ajout d'absence effectué";} ?></h4>
                     <div class="row">
                         <div class="select-box">
