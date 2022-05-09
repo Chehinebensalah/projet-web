@@ -1,6 +1,5 @@
 <?php
 session_start();
-include("connexion.php");
 if ($_SESSION["autoriser"] != "oui") {
     header("location:login.php");
     exit();
@@ -33,7 +32,7 @@ else
     </div>
     <nav class="sidebar">
         <div class="text">
-        SCO ENICARTHAGE
+            Side Menu
         </div>
         <ul>
             <li class="active"><a href="#">Dashboard</a></li>
@@ -64,77 +63,82 @@ else
                     <li><a href="ChercherGroupe.php">Chercher Groupe</a></li>
                 </ul>
             </li>
-            <li><a href="Saisirabsence.php">saisir Absence</a></li>
-         <li><a href="Afficherabsence.php">Afficher Absence</a></li>
             <li><a href="deconnexion.php">Deconnexion</a></li>
 
         </ul>
     </nav>
     <div></div>
     <div class="content">
+
         <div class="container">
             <div class="wrapper">
-                <?php 
-                $query=$pdo->prepare('select * from etudiant where cin=:cin');
-                $query->bindValue(':cin',$_GET['cin'],PDO::PARAM_INT);
-                $results=$query->execute();
-                $etudiant=$query->fetch();
-                
-                ?>
-                <title class="title">*  Données de l'etudiant  * </title>
+                <title class="title">Ajouter Etudiant </title>
                     <div id="demo"></div>
                     <form id="myForm" method="POST">
                         <div class="row">
-                            <input type="text" id="nom" name="nom" placeholder="Nom:" value="<?=$etudiant['nom']?>" required />
+                            <input type="text" id="nom" name="nom" placeholder="Nom:" required />
                         </div>
                         <div class="row">
-                            <input type="text" id="prenom" name="prenom" placeholder="Prenom:" value="<?=$etudiant['prenom']?>" required />
+                            <input type="text" id="prenom" name="prenom" placeholder="Prenom:" required />
                         </div>
                         <div class="row">
-                            <input type="default" id="cin" name="cin" placeholder="CIN:" value="<?=$etudiant['cin']?>" required />
+                            <input type="number_format" id="cin" name="cin" placeholder="CIN:" required />
                         </div>
                         <div class="row">
-                            <input type="email" id="email" name="email" placeholder="E-mail:" value="<?=$etudiant['email']?>" required />
+                            <input type="password" id="pwd" name="pwd" placeholder="Mot de passe:" required />
                         </div>
                         <div class="row">
-                            <input type="text" id="classe" name="classe" placeholder="Classe:" value="<?=$etudiant['Classe']?>" required />
+                            <input type="password" id="cpwd" name="cpwd" placeholder="Confirmer Mot de passe:" required />
                         </div>
                         <div class="row">
-                            <input type="text" id="adresse" name="adresse" placeholder="Adresse:" value="<?=$etudiant['adresse']?>" required />
+                            <input type="email" id="email" name="email" placeholder="E-mail:" required />
                         </div>
-                        <div class="row button">
-                        <input type="submit" name='valider' value="valider" />
+                        <div class="row">
+                            <input type="text" id="classe" name="classe" placeholder="Classe:" required />
                         </div>
-                      <?php  
-                    @$nom=$_POST["nom"];
-                    @$prenom=$_POST["prenom"];
-                    @$cin=$etudiant['cin'];
-                    @$email=$_POST["email"];
-                    @$classe=$_POST["classe"];
-                    @$adresse=$_POST["adresse"];
-                    if(isset($_POST["valider"])){
-                        $data = [
-                            'nom' => $nom,
-                            'prenom' => $prenom,
-                            'adresse' =>$adresse,
-                            'Classe' => $classe,
-                            'email' => $email,
-                            'cin' => $cin,
-                        ];
-                        $sql = "UPDATE etudiant SET email=:email, nom=:nom, prenom=:prenom, adresse=:adresse, Classe=:Classe  WHERE cin=:cin";
-                        $stmt= $pdo->prepare($sql);
-                        $stmt->execute($data);
-                          if($stmt){header("location:modifier.php");}
-                        
-                    }
-                    ?>
+                        <div class="row">
+                            <input type="text" id="adresse" name="adresse" placeholder="Adresse:" required />
+                        </div>
+                        <div>
+                            <button class="btnajouter" type="button" name="valider" onclick="ajouter()">Ajouter</button>
+                        </div>
                     </form>
-                    
                 
             </div>
         </div>
 
     </div>
+    <script>
+        function ajouter() {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "http://localhost/webENICAR/ajouter.php";
+
+            //Envoie Req
+            xmlhttp.open("POST", url, true);
+
+            form = document.getElementById("myForm");
+            formdata = new FormData(form);
+
+            xmlhttp.send(formdata);
+
+            //Traiter Res
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // alert(this.responseText);
+                    if (this.responseText == "OK") {
+                        document.getElementById("demo").innerHTML = "L'ajout de l'étudiant a été bien effectué";
+                        document.getElementById("demo").style.backgroundColor = "white";
+                    } else {
+                        document.getElementById("demo").innerHTML = " Merci de vérifier le CIN";
+                        document.getElementById("demo").style.backgroundColor = "#fba";
+                    }
+                }
+            }
+
+
+        }
+    </script>
     <script>
         $('.btn').click(function() {
             $(this).toggleClass("click");

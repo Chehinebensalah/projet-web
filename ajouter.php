@@ -13,8 +13,8 @@ $adresse=$_REQUEST['adresse'];
 $pwd=$_REQUEST['pwd'];
 $cpwd=$_REQUEST['cpwd'];
 
-$classe=$_REQUEST['classe'];
-
+$class=$_REQUEST['classe'];
+$classe=trim($class);
 
 include("connexion.php");
          $sel=$pdo->prepare("select cin from etudiant where cin=? limit 1");

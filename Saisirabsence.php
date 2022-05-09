@@ -34,7 +34,7 @@ else
     </div>
     <nav class="sidebar">
         <div class="text">
-            Side Menu
+          SCO ENICARTHAGE
         </div>
         <ul>
             <li class="active"><a href="#">Dashboard</a></li>
@@ -145,7 +145,7 @@ else
             <div class="wrapper">
                 <title class="title">Saisir Absence </title>
                 <div id="demo"></div>
-                <form action="Saisirabsence.php" method="POST" id="myForm">
+                <form action="saisirabsence.php" method="POST" id="myForm">
                     <h4><?php if (isset($_POST['ajouter'])){ echo "Ajout d'absence effectué";} ?></h4>
                     <div class="row">
                         <div class="select-box">

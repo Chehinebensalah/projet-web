@@ -35,7 +35,7 @@ else
         </div>
         <nav class="sidebar">
             <div class="text">
-                Side Menu
+                SCO ENICARTHAGE
             </div>
             <ul>
                 <li class="active"><a href="#">Dashboard</a></li>
@@ -148,7 +148,7 @@ else
                 }
                 echo '</table>';
             }else{
-                echo" Groupe non disponible ou Le nom de Groupe non correcte";
+                echo" 0 Absence pour ce groupe ";
             }
         }
             ?>

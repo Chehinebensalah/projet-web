@@ -31,7 +31,7 @@ else
    </div>
    <nav class="sidebar">
       <div class="text">
-         Side Menu
+      SCO ENICARTHAGE
       </div>
       <ul>
          <li class="active"><a href="#">Dashboard</a></li>

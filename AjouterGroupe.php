@@ -66,9 +66,8 @@ else
                 </ul>
             </li>
             <li><a href="Saisirabsence.php">saisir Absence</a></li>
-         <li><a href="Afficherabsence.php">Afficher Absence</a></li>
+            <li><a href="Afficherabsence.php">Afficher Absence</a></li>
             <li><a href="deconnexion.php">Deconnexion</a></li>
-
         </ul>
     </nav>
     <div></div>
@@ -78,10 +77,11 @@ else
                 width: 100%;
                 color: #17789e;
                 background-color: white;
+                justify-content: space-around;
             }
 
             .select-box .select {
-                height: 40px;
+                height: 30px;
                 width: 100%;
                 position: relative;
                 border-radius: 20px;
@@ -91,91 +91,113 @@ else
                 align-items: center;
                 background: white;
                 color: #17789e;
+                margin-top: auto;
             }
 
             .select-box .select option {
                 text-align: center;
             }
+
+            input[type="date"] {
+                background-color: white;
+                color: #17789e;
+                padding: 15px;
+                top: 50%;
+                left: 50%;
+                font-family: "Roboto Mono", monospace;
+
+                font-size: 44px;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                position: absolute;
+                transform: translate(-50%);
+            }
+
+            ::-webkit-calendar-picker-indicator {
+                background-color: #17789e;
+
+                padding: 5px;
+                cursor: pointer;
+                border-radius: 3px;
+            }
         </style>
-
         <div class="container">
-            <div class="wrapper">
-                <title class="title">Ajouter Etudiant </title>
-                <?php
 
-include("connexion.php");
-if (isset($_POST['ajouter'])) {
-    $Classe = trim($_POST['classe']);
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $pwd= $_POST['pwd'];
-    $cpwd= $_POST['cpwd'];
-    $cin = $_POST['cin'];
-    $email = $_POST['email'];
-    $adresse = $_POST['adresse'];
-    $sqlverif = " select * from etudiant where cin=?";
-    $stmtverif = $pdo->prepare($sqlverif);
-    $stmtverif->execute(array($cin));
-    $res = $stmtverif->fetchAll();
-    if (count($res) > 0) {
-        echo " CIN existe deja ";
-    } else {
-        $sql = "INSERT INTO etudiant(cin,email,password,cpassword,nom,prenom,adresse,Classe)  values (?,?,?,?,?,?,?,?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array($cin,$email,md5($pwd),md5($cpwd),$nom,$prenom,$adresse,$Classe,));
-        echo "  ajouté avec succées " ;
-    }
-}
-?>
-                <form id="myForm" method="POST">
-                    <div class="row">
-                        <input type="text" id="nom" name="nom" placeholder="Nom:" required />
-                    </div>
-                    <div class="row">
-                        <input type="text" id="prenom" name="prenom" placeholder="Prenom:" required />
-                    </div>
-                    <div class="row">
-                        <input type="number_format" id="cin" name="cin" placeholder="CIN:" required />
-                    </div>
-                    <div class="row">
-                        <input type="password" id="pwd" name="pwd" placeholder="Mot de passe:" required />
-                    </div>
-                    <div class="row">
-                        <input type="password" id="cpwd" name="cpwd" placeholder="Confirmer Mot de passe:" required />
-                    </div>
-                    <div class="row">
-                        <input type="email" id="email" name="email" placeholder="E-mail:" required />
-                    </div>
+            <div class="wrapper">
+                <title class="title">Ajouter Groupe </title>
+                <form action="AjouterGroupe.php" method="POST" id="myForm">
+                    <?php
+
+                    include("connexion.php");
+                    if (isset($_POST['ajouter'])) {
+                        $niveau = trim($_POST['niveau']);
+                        $specialite = trim($_POST['specialite']);
+                        $groupe = trim($_POST['groupe']);
+                        $name_classe = "$niveau.$specialite.$groupe";
+                        $sqlverif = " select * from classe where name_classe=?";
+                        $stmtverif = $pdo->prepare($sqlverif);
+                        $stmtverif->execute(array($name_classe));
+                        $res = $stmtverif->fetchAll();
+                        if (count($res) > 0) {
+                            echo " groupe existe deja ";
+                        } else {
+                            $sql = "INSERT INTO classe values (:name_classe)";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute([
+                                ':name_classe' => $name_classe,
+                            ]);
+                            echo " le groupe : $name_classe est ajouté avec succées " ;
+                        }
+                    }
+                    ?>
                     <div class="row">
                         <div class="select-box">
-                            <select name="classe" id="classe" class="select">
-                                <?php
-                                $sql0 = "SELECT * FROM classe";
-                                $stmt0 = $pdo->prepare($sql0);
-                                $stmt0->execute();
-                                while ($cats = $stmt0->fetch(PDO::FETCH_ASSOC)) { ?>
-                                    <option value="<?php echo $cats['name_classe']; ?>">
-                                        <?php echo $cats['name_classe']; ?>
-                                    </option>
-                                <?php }
-                                ?>
+                            <h3 for="niveau">Selectionner le niveau</h3>
+                            <select id="niveau" name="niveau" class="select">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
-                        <input type="text" id="adresse" name="adresse" placeholder="Adresse:" required />
+                        <div class="select-box">
+                            <h3 for="specialite">Selectionner la specialite</h3>
+                            <select id="specialite" name="specialite" class="select">
+                                <option selected value="INFO"> genie informatique</option>
+                                <option value="GSI"> genie infotronique</option>
+                                <option value="MECA"> genie mecatronique</option>
+                                <option value="GSIL"> genie industriel</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
+                    <div class="row">
+                        <div class="select-box">
+                            <h3 for="groupe">Selectionner le groupe</h3>
+                            <select id="groupe" name="groupe" class="select">
+                                <option value="A"> A </option>
+                                <option value="B"> B </option>
+                                <option value="C"> C </option>
+                                <option value="D"> D </option>
+                                <option value="E"> E </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
                     <button class="btnajouter" type="submit" name="ajouter" value="ajouter">Ajouter</button>
-                    </div>
-                </form>
 
             </div>
         </div>
+        </form>
 
     </div>
-    
-    </script>
+    </div>
+
+    </div>
+
     <script>
         $('.btn').click(function() {
             $(this).toggleClass("click");
